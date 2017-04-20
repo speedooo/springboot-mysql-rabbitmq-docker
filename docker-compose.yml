@@ -1,0 +1,26 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: demo-mq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  mysqldb:
+    image: mysql:5.6
+    container_name: demo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: demo
+      MYSQL_USER: demo_user
+      MYSQL_PASSWORD: demo_pass
+
+  app:
+    image: springbootmysqlrabbitmqdocker:1.0
+    container_name: demo-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mysqldb"
+    links: 
+      - mysqldb:mysqlhost
