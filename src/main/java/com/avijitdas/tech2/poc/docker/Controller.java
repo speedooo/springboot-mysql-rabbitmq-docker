@@ -18,6 +18,9 @@ public class Controller {
 	@Autowired
 	private CustomerRepository repository;
 
+	@Autowired
+	private Sender sender;
+
 	@RequestMapping("/")
 	public String home() {
 		Customer customer = this.repository.findAll().iterator().next(); // first record
@@ -38,6 +41,8 @@ public class Controller {
 			Customer customer = new Customer(name, email);
 			repository.save(customer);
 			customerId = String.valueOf(customer.getId());
+
+			sender.send(customer);
 		} catch (Exception ex) {
 			return "Error creating the customer: " + ex.toString();
 		}
